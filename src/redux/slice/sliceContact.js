@@ -1,44 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  allContactsApi,
-  addContactApi,
-  deleteContactApi,
-} from '../contactsApi/contactsApi';
+import { createSlice } from '@reduxjs/toolkit';
+import { addContact, deleteContact, fetchContacts,  } from 'redux/operations/operations';
 
-export const fetchContacts = createAsyncThunk(
-  'contacts/fetchAll',
-  async (_, { rejectWithValue }) => {
-    try {
-      const contacts = await allContactsApi();
-      return contacts;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-export const addContact = createAsyncThunk(
-  'contacts/addContact',
-  async (id, { rejectWithValue }) => {
-    try {
-      const contacts = await addContactApi(id);
-      return contacts;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const deleteContact = createAsyncThunk(
-  'contacts/deleteContact',
-  async (contact, { rejectWithValue }) => {
-    try {
-      const contacts = await deleteContactApi(contact);
-      return contacts;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 
 export const sliceContact = createSlice({
   name: 'phonebook',
@@ -70,6 +32,7 @@ export const sliceContact = createSlice({
         state.contacts.error = action.payload;
         state.contacts.isLoading = false;
       })
+
       .addCase(addContact.fulfilled, (state, action) => {
         state.contacts.items.push(action.payload);
         state.contacts.isLoading = false;
@@ -81,10 +44,11 @@ export const sliceContact = createSlice({
         state.contacts.isLoading = false;
         state.contacts.error = action.payload;
       })
+
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.contacts.items = state.contacts.items.filter(
           contact => contact.id !== action.payload.id
-        );
+        )
         state.contacts.isLoading = false;
       })
       .addCase(deleteContact.pending, state => {
@@ -93,7 +57,8 @@ export const sliceContact = createSlice({
       .addCase(deleteContact.rejected, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.error = action.payload;
-      });
+      })
+
   },
 });
 

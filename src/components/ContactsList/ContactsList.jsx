@@ -2,7 +2,7 @@ import ContactsItem from '../ContactsItem/ContactsItem';
 import { Ul } from './ContactsList.styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchContacts } from '../../redux/slice/sliceContact';
+import { fetchContacts } from '../../redux/operations/operations';
 import Loader from 'components/Loader/Loader';
 import { filterSelector, loaderSelector } from 'redux/selector/selector';
 import { errorRequestelector } from '../../redux/selector/selector';

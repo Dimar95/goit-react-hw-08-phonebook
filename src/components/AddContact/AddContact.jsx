@@ -7,7 +7,7 @@ import {
   ContainerInput,
 } from './AddContact.styled';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact } from '../../redux/slice/sliceContact';
+import { addContact } from '../../redux/operations/operations';
 import { nanoid } from 'nanoid';
 import { itemsSelector } from 'redux/selector/selector';
 

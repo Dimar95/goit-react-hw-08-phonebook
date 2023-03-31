@@ -6,7 +6,7 @@ import {
   Name,
   ContainerOneContact,
 } from './ContactsItem.styled';
-import { deleteContact } from '../../redux/slice/sliceContact';
+import { deleteContact } from '../../redux/operations/operations';
 import { useDispatch } from 'react-redux';
 
 const ContactsItem = ({ name, phone, id }) => {

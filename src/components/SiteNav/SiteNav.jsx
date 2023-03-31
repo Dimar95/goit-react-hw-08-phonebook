@@ -8,8 +8,11 @@ import {
   Container,
 } from './SiteNav.styled';
 import { Outlet } from 'react-router-dom';
-
+import { userNameSelector } from 'redux/selector/selector';
+import { useSelector } from 'react-redux';
 const SiteNav = () => {
+  const userName = useSelector(userNameSelector);
+
   return (
     <>
       <Header>
@@ -20,10 +23,12 @@ const SiteNav = () => {
             <LinkStyle to={'/login'}>Login</LinkStyle>
             <LinkStyle to={'/logout'}>Create user</LinkStyle>
           </Nav>
-          <LogOutContainer>
-            <p>Welcome</p>
-            <Button type="button">Log Out</Button>
-          </LogOutContainer>
+          {userName !== '' && (
+            <LogOutContainer>
+              <p>{`Welcome ${userName}`}</p>
+              <Button type="button">Log Out</Button>
+            </LogOutContainer>
+          )}
         </Container>
       </Header>
       <Outlet />

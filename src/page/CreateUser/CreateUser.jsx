@@ -1,6 +1,20 @@
+import { registerUserApi } from 'redux/contactsApi/contactsApi';
+
 const LogOut = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log('🚀 ~ e:', e.currentTarget.user.value);
+    console.log('🚀 ~ e:', e.currentTarget.email.value);
+    console.log('🚀 ~ e:', e.currentTarget.password.value);
+    registerUserApi({
+      name: e.currentTarget.user.value,
+      email: e.currentTarget.email.value,
+      password: e.currentTarget.password.value,
+    });
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label htmlFor="user">
         {'User Name'}
 
