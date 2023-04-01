@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   AddContactStyled,
   Label,
@@ -8,21 +8,27 @@ import {
 } from './AddContact.styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/operations/operations';
-import { nanoid } from 'nanoid';
-import { itemsSelector } from 'redux/selector/selector';
+import { itemsSelector, loaderSelector } from 'redux/selector/selector';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { errorRequestelector } from 'redux/selector/selector';
+import Loader from 'components/Loader/Loader';
 
 const AddContact = () => {
-  const [phone, setPhone] = useState('');
+  const [number, setPhone] = useState('');
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const contactSelector = useSelector(itemsSelector);
+  const addContactError = useSelector(errorRequestelector);
+  const loader = useSelector(loaderSelector);
 
   const onChange = e => {
     switch (e.target.name) {
       case 'name':
         setName(e.currentTarget.value);
         break;
-      case 'phone':
+      case 'number':
         setPhone(e.currentTarget.value);
         break;
       default:
@@ -35,23 +41,39 @@ const AddContact = () => {
     setName('');
   };
 
-  const onAddContact = ({ name, phone }) => {
+  const onAddContact = ({ name, number }) => {
     if (
       contactSelector.find(obj => obj.name.toLowerCase() === name.toLowerCase())
     ) {
       alert(`${name} is already in contacts.`);
       return;
     }
-    dispatch(addContact({ name, phone, id: nanoid() }));
-    reset();
+    dispatch(addContact({ name, number })).then(() => reset());
   };
+
+  useMemo(() => {
+    if (addContactError === null) {
+      return;
+    }
+
+    toast.error(addContactError, {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    });
+  }, [addContactError]);
 
   return (
     <>
       <AddContactStyled
         onSubmit={e => {
           e.preventDefault();
-          onAddContact({ name, phone });
+          onAddContact({ name, number });
         }}
       >
         <ContainerInput>
@@ -67,21 +89,37 @@ const AddContact = () => {
               required
             />
           </Label>
-          <Label htmlFor="phone">
+          <Label htmlFor="number">
             Number
             <Input
               onChange={onChange}
-              value={phone}
+              value={number}
               type="tel"
-              name="phone"
+              name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
             />
           </Label>
         </ContainerInput>
-        <Button type="submit">Add contact</Button>
+        <Button type="submit">
+          {loader === 'addContact' ? <Loader /> : 'Add contact'}
+        </Button>
       </AddContactStyled>
+      {addContactError !== null && (
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      )}
     </>
   );
 };

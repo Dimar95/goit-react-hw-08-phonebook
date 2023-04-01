@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addContact, deleteContact, fetchContacts,  } from 'redux/operations/operations';
+
+import { addContact, deleteContact,fetchContacts  } from 'redux/operations/operations';
 
 
 export const sliceContact = createSlice({
@@ -26,7 +27,7 @@ export const sliceContact = createSlice({
         state.contacts.isLoading = false;
       })
       .addCase(fetchContacts.pending, (state) => {
-        state.contacts.isLoading = true;
+        state.contacts.isLoading = 'fetchContacts';
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.contacts.error = action.payload;
@@ -38,7 +39,7 @@ export const sliceContact = createSlice({
         state.contacts.isLoading = false;
       })
       .addCase(addContact.pending, state => {
-        state.contacts.isLoading = true;
+        state.contacts.isLoading = 'addContact';
       })
       .addCase(addContact.rejected, (state, action) => {
         state.contacts.isLoading = false;
@@ -52,7 +53,7 @@ export const sliceContact = createSlice({
         state.contacts.isLoading = false;
       })
       .addCase(deleteContact.pending, state => {
-        state.contacts.isLoading = true;
+        state.contacts.isLoading = 'deleteContact';
       })
       .addCase(deleteContact.rejected, (state, action) => {
         state.contacts.isLoading = false;

@@ -9,19 +9,26 @@ import {
 import { deleteContact } from '../../redux/operations/operations';
 import { useDispatch } from 'react-redux';
 
-const ContactsItem = ({ name, phone, id }) => {
+const ContactsItem = ({ name, number, id }) => {
   const dispatch = useDispatch();
+
+  const classTogle = e => {
+    const currentButton = e.target;
+    currentButton.textContent = 'Delete...';
+    return;
+  };
 
   return (
     <Li>
       <ContainerOneContact>
         <Name>{name}</Name>
-        <PhoneStyle>{phone}</PhoneStyle>
+        <PhoneStyle>{number}</PhoneStyle>
       </ContainerOneContact>
       <Button
         type="button"
-        onClick={() => {
+        onClick={e => {
           dispatch(deleteContact(id));
+          classTogle(e);
         }}
       >
         Delete
@@ -34,6 +41,6 @@ export default ContactsItem;
 
 ContactsItem.propTypes = {
   name: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };

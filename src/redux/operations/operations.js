@@ -1,18 +1,28 @@
 import {  createAsyncThunk } from '@reduxjs/toolkit';
-// import { toast } from 'react-toastify';
+
+import axios from 'axios';
 
 import {
-  allContactsApi,
-  addContactApi,
-  deleteContactApi,
+
   loginUserApi,
+  getContactsUserApi,addContactsUserApi, loginCurrentUserApi, deleteContactsUserApi, logoutUserApi
 } from '../contactsApi/contactsApi';
 
+
+
+const token = {
+  set(token){
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`
+  },
+  unset(){
+    axios.defaults.headers.common.Authorization = ''
+  }
+}
 export const fetchContacts = createAsyncThunk(
     'contacts/fetchAll',
     async (_, { rejectWithValue }) => {
       try {
-        const contacts = await allContactsApi();
+        const contacts = await getContactsUserApi();
         return contacts;
       } catch (error) {
         return rejectWithValue(error.message);
@@ -22,9 +32,9 @@ export const fetchContacts = createAsyncThunk(
 
   export const addContact = createAsyncThunk(
     'contacts/addContact',
-    async (id, { rejectWithValue }) => {
+    async (objContact, { rejectWithValue }) => {
       try {
-        const contacts = await addContactApi(id);
+        const contacts = await addContactsUserApi(objContact);
         return contacts;
       } catch (error) {
         return rejectWithValue(error.message);
@@ -34,9 +44,9 @@ export const fetchContacts = createAsyncThunk(
   
   export const deleteContact = createAsyncThunk(
     'contacts/deleteContact',
-    async (contact, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
       try {
-        const contacts = await deleteContactApi(contact);
+        const contacts = await deleteContactsUserApi(id);
         return contacts;
       } catch (error) {
         return rejectWithValue(error.message);
@@ -49,6 +59,21 @@ export const fetchContacts = createAsyncThunk(
     async (UserObj, { rejectWithValue }) => {
       try {
         const user = await loginUserApi(UserObj);
+        token.set(user.token)
+        return user;
+      } catch (error) {
+        
+        return rejectWithValue(error.message);
+      }
+    }
+
+  );
+  export const loginCurrentUser = createAsyncThunk(
+    'user/loginCurrentUser',
+    async (userToken, { rejectWithValue }) => {
+      try {
+        token.set(userToken)
+        const user = await loginCurrentUserApi();
         return user;
       } catch (error) {
         
@@ -56,3 +81,16 @@ export const fetchContacts = createAsyncThunk(
       }
     }
   );
+
+  export const logoutUser = createAsyncThunk(
+    'user/logoutUserApi',
+    async (_, { rejectWithValue }) => {
+      try {
+        const user = await logoutUserApi();
+        token.unset()
+        return user;
+      } catch (error) {
+        
+        return rejectWithValue(error.message);
+      }
+    }  );

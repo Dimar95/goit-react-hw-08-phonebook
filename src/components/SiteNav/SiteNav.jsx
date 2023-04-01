@@ -8,25 +8,36 @@ import {
   Container,
 } from './SiteNav.styled';
 import { Outlet } from 'react-router-dom';
-import { userNameSelector } from 'redux/selector/selector';
-import { useSelector } from 'react-redux';
-const SiteNav = () => {
-  const userName = useSelector(userNameSelector);
+import { userEmailSelector } from 'redux/selector/selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from 'redux/operations/operations';
 
+const SiteNav = () => {
+  const dispatch = useDispatch();
+  const userEmail = useSelector(userEmailSelector);
+
+  const handleClick = e => {
+    e.preventDefault();
+    dispatch(logoutUser());
+  };
   return (
     <>
       <Header>
         <Container>
           <Nav>
             <Head>Phonebook</Head>
-            <LinkStyle to={'/'}>Home</LinkStyle>
-            <LinkStyle to={'/login'}>Login</LinkStyle>
-            <LinkStyle to={'/logout'}>Create user</LinkStyle>
+            <LinkStyle to={'/'}>{userEmail ? 'Contacts' : 'Home'}</LinkStyle>
+            {userEmail === '' && <LinkStyle to={'/login'}>Login</LinkStyle>}
+            {userEmail === '' && (
+              <LinkStyle to={'/logout'}>Create user</LinkStyle>
+            )}
           </Nav>
-          {userName !== '' && (
+          {userEmail !== '' && (
             <LogOutContainer>
-              <p>{`Welcome ${userName}`}</p>
-              <Button type="button">Log Out</Button>
+              <p>{`Welcome ${userEmail}`}</p>
+              <Button type="button" onClick={handleClick}>
+                Log Out
+              </Button>
             </LogOutContainer>
           )}
         </Container>

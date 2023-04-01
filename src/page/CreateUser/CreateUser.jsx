@@ -1,5 +1,5 @@
 import { registerUserApi } from 'redux/contactsApi/contactsApi';
-
+import css from './CreateUser.module.css';
 const LogOut = () => {
   const handleSubmit = e => {
     e.preventDefault();
@@ -14,24 +14,28 @@ const LogOut = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="user">
-        {'User Name'}
+    <div className={css.container}>
+      <form className={css.form} onSubmit={handleSubmit}>
+        <label htmlFor="user" className={css.label}>
+          {'User Name'}
 
-        <input type="text" name="user" />
-      </label>
-      <label htmlFor="email">
-        {'Email'}
+          <input className={css.input} type="text" name="user" />
+        </label>
+        <label htmlFor="email" className={css.label}>
+          {'Email'}
 
-        <input type="email" name="email" />
-      </label>
-      <label htmlFor="password">
-        {'Password'}
+          <input className={css.input} type="email" name="email" />
+        </label>
+        <label htmlFor="password" className={css.label}>
+          {'Password'}
 
-        <input type="password" name="password" />
-      </label>
-      <button type="submit">Create User</button>
-    </form>
+          <input className={css.input} type="password" name="password" />
+        </label>
+        <button type="submit" className={css.button}>
+          Create User
+        </button>
+      </form>
+    </div>
   );
 };
 export default LogOut;

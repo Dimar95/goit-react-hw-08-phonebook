@@ -8,8 +8,10 @@ export const errorRequestelector = state => state.phonebook.contacts.error
 
 export const errorUserRequestSelector = state => state.userState.user.error
 
-export const userTokenSelector = state => state.userState.user.token
+export const userTokenSelector = state => state.userState.token
 
 export const userNameSelector = state => state.userState.user.name
+
+export const userEmailSelector = state => state.userState.user.email
 
 

@@ -1,15 +1,16 @@
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { loginUser } from 'redux/operations/operations';
 import { errorUserRequestSelector } from 'redux/selector/selector';
 
 const Login = () => {
   const dispatch = useDispatch();
   const userError = useSelector(errorUserRequestSelector);
+
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('🚀 ~ e:', e.currentTarget.email.value);
-    console.log('🚀 ~ e:', e.currentTarget.password.value);
     dispatch(
       loginUser({
         email: e.currentTarget.email.value,
@@ -17,6 +18,22 @@ const Login = () => {
       })
     );
   };
+  useMemo(() => {
+    if (userError === null) {
+      return;
+    }
+
+    toast.error(userError, {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    });
+  }, [userError]);
 
   return (
     <>
@@ -31,7 +48,7 @@ const Login = () => {
         </label>
         <button type="submit">Login</button>
       </form>{' '}
-      {userError && (
+      {userError !== null && (
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -42,7 +59,7 @@ const Login = () => {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme="colored"
         />
       )}
     </>

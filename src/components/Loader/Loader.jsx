@@ -5,8 +5,8 @@ const Loader = () => {
   return (
     <div className={css.loader}>
       <Grid
-        height="80"
-        width="80"
+        height="28"
+        width="28"
         color="#3f51b5"
         ariaLabel="grid-loading"
         radius="12.5"
