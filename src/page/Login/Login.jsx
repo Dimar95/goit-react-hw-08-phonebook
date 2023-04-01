@@ -1,13 +1,19 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loginUser } from 'redux/operations/operations';
-import { errorUserRequestSelector } from 'redux/selector/selector';
+import {
+  errorUserRequestSelector,
+  userTokenSelector,
+} from 'redux/selector/selector';
+import css from './Login.module.css';
 
 const Login = () => {
   const dispatch = useDispatch();
   const userError = useSelector(errorUserRequestSelector);
+  const userToken = useSelector(userTokenSelector);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -16,7 +22,11 @@ const Login = () => {
         email: e.currentTarget.email.value,
         password: e.currentTarget.password.value,
       })
-    );
+    ).then(() => {
+      e.target.email.value = '';
+      e.target.password.value = '';
+      <Navigate to="/" replace={true} />;
+    });
   };
   useMemo(() => {
     if (userError === null) {
@@ -35,18 +45,22 @@ const Login = () => {
     });
   }, [userError]);
 
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
+  return userToken !== '' ? (
+    <Navigate to="/" replace={true} />
+  ) : (
+    <div className={css.container}>
+      <form className={css.form} onSubmit={handleSubmit}>
+        <label className={css.label} htmlFor="email">
           {'Email'}
-          <input type="email" name="email" />
+          <input className={css.input} type="email" name="email" />
         </label>
-        <label htmlFor="password">
+        <label className={css.label} htmlFor="password">
           {'Password'}
-          <input type="password" name="password" />
+          <input className={css.input} type="password" name="password" />
         </label>
-        <button type="submit">Login</button>
+        <button className={css.button} type="submit">
+          Login
+        </button>
       </form>{' '}
       {userError !== null && (
         <ToastContainer
@@ -62,7 +76,7 @@ const Login = () => {
           theme="colored"
         />
       )}
-    </>
+    </div>
   );
 };
 export default Login;

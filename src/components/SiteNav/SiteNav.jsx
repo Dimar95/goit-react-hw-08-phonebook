@@ -11,11 +11,21 @@ import { Outlet } from 'react-router-dom';
 import { userEmailSelector } from 'redux/selector/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from 'redux/operations/operations';
-
+import { userTokenSelector } from 'redux/selector/selector';
+import { useEffect } from 'react';
+import { loginCurrentUser } from 'redux/operations/operations';
 const SiteNav = () => {
   const dispatch = useDispatch();
   const userEmail = useSelector(userEmailSelector);
 
+  const userToken = useSelector(userTokenSelector);
+
+  useEffect(() => {
+    if (userToken === '') {
+      return;
+    }
+    dispatch(loginCurrentUser(userToken));
+  }, [dispatch, userToken]);
   const handleClick = e => {
     e.preventDefault();
     dispatch(logoutUser());

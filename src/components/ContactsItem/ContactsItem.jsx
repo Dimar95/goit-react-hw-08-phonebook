@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import {
   Li,
   Button,
@@ -27,7 +29,9 @@ const ContactsItem = ({ name, number, id }) => {
       <Button
         type="button"
         onClick={e => {
-          dispatch(deleteContact(id));
+          dispatch(deleteContact(id)).then(data => {
+            Notify.info(`Contact ${data.payload.name} removed`);
+          });
           classTogle(e);
         }}
       >

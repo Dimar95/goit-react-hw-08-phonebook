@@ -1,19 +1,31 @@
-import { registerUserApi } from 'redux/contactsApi/contactsApi';
 import css from './CreateUser.module.css';
+import { registerUser } from 'redux/operations/operations';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { userTokenSelector } from 'redux/selector/selector';
 const LogOut = () => {
+  const dispatch = useDispatch();
+  const userToken = useSelector(userTokenSelector);
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('🚀 ~ e:', e.currentTarget.user.value);
-    console.log('🚀 ~ e:', e.currentTarget.email.value);
-    console.log('🚀 ~ e:', e.currentTarget.password.value);
-    registerUserApi({
-      name: e.currentTarget.user.value,
-      email: e.currentTarget.email.value,
-      password: e.currentTarget.password.value,
+
+    dispatch(
+      registerUser({
+        name: e.currentTarget.user.value,
+        email: e.currentTarget.email.value,
+        password: e.currentTarget.password.value,
+      })
+    ).then(() => {
+      e.target.user.value = '';
+      e.target.email.value = '';
+      e.target.password.value = '';
+      <Navigate to="/" replace={true} />;
     });
   };
 
-  return (
+  return userToken !== '' ? (
+    <Navigate to="/" replace={true} />
+  ) : (
     <div className={css.container}>
       <form className={css.form} onSubmit={handleSubmit}>
         <label htmlFor="user" className={css.label}>

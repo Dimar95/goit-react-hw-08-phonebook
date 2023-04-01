@@ -46,10 +46,7 @@ const ContactsList = () => {
         {error && <div>{error}</div>}
         {isLoading === 'fetchContacts' && <Loader />}
         {arrayContact.length === 0 ? (
-          <div>
-            You don't have saved contacts. To display contacts, add them through
-            a special form
-          </div>
+          <div>Place for your contacts</div>
         ) : (
           arrayContact.map(contact => (
             <ContactsItem

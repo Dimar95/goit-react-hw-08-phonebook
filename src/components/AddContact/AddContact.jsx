@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import {
   AddContactStyled,
   Label,
@@ -48,7 +50,11 @@ const AddContact = () => {
       alert(`${name} is already in contacts.`);
       return;
     }
-    dispatch(addContact({ name, number })).then(() => reset());
+    dispatch(addContact({ name, number })).then(data => {
+      Notify.success(`Add new contact ${data.payload.name}`);
+      reset();
+      return;
+    });
   };
 
   useMemo(() => {
