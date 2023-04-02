@@ -12,6 +12,8 @@ export const userTokenSelector = state => state.userState.token
 
 export const userNameSelector = state => state.userState.user.name
 
-export const userEmailSelector = state => state.userState.user.email
+export const userEmailSelector = state => state.userState.user.email 
+
+export const isLogggedInSelector = state => state.userState.user.isLoading 
 
 

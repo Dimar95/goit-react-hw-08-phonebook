@@ -7,6 +7,8 @@ import SiteNav from './SiteNav/SiteNav';
 import StartPage from './StartPage/StartPage';
 import { useSelector } from 'react-redux';
 import { userEmailSelector } from 'redux/selector/selector';
+import PrivateRoute from 'service/PrivatePoute';
+import PublicPoute from 'service/PublicPoute';
 
 const App = () => {
   const userEmail = useSelector(userEmailSelector);
@@ -15,9 +17,31 @@ const App = () => {
     <Routes>
       <Route path="/" element={<SiteNav />}>
         <Route index element={userEmail ? <Contacts /> : <StartPage />} />
-        <Route path="contacts" element={<Contacts />} />
-        <Route path="login" element={<Login />} />
-        <Route path="logout" element={<LogOut />} />
+
+        <Route
+          path="contacts"
+          element={
+            <PrivateRoute>
+              <Contacts />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <PublicPoute>
+              <Login />
+            </PublicPoute>
+          }
+        />
+        <Route
+          path="logout"
+          element={
+            <PublicPoute>
+              <LogOut />
+            </PublicPoute>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Route>

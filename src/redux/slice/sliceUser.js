@@ -11,6 +11,7 @@ export const sliceUser = createSlice({
       email:'',
       isLoading: false,
       error: null,
+      isLogggedIn: false,
     }
   },
 
@@ -24,6 +25,7 @@ export const sliceUser = createSlice({
         state.user.email = action.payload.user.email
         state.token = action.payload.token
         state.user.isLoading = false;
+        state.user.isLogggedIn = true;
       })
       .addCase(loginUser.pending, state => {
         state.user.isLoading = 'true';
@@ -37,6 +39,8 @@ export const sliceUser = createSlice({
         state.user.name = action.payload.name
         state.user.email = action.payload.email
         state.user.isLoading = false;
+        state.user.isLogggedIn = true;
+
       })
       .addCase(loginCurrentUser.pending, state => {
         state.user.isLoading = true;
@@ -51,6 +55,8 @@ export const sliceUser = createSlice({
         state.user.email = ''
         state.token = ''
         state.user.isLoading = false;
+        state.user.isLogggedIn = false;
+
       })
       .addCase(logoutUser.pending, state => {
         state.user.isLoading = true;
@@ -65,6 +71,8 @@ export const sliceUser = createSlice({
         state.user.email = action.payload.user.email
         state.token = action.payload.token
         state.user.isLoading = false;
+        state.user.isLogggedIn = true;
+
       })
       .addCase(registerUser.pending, state => {
         state.user.isLoading = true;
