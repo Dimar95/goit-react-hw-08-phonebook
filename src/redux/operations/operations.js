@@ -86,9 +86,11 @@ export const registerUser = createAsyncThunk(
 );
 export const loginCurrentUser = createAsyncThunk(
   'user/loginCurrentUser',
-  async (userToken, { rejectWithValue }) => {
+  async (_,{ rejectWithValue, getState }) => {
+    const state = getState()
+    const tokenUser = state.userState.token
+    token.set(tokenUser);
     try {
-      token.set(userToken);
       const user = await loginCurrentUserApi();
       return user;
     } catch (error) {

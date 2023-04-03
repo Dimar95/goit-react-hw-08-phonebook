@@ -22,6 +22,7 @@ export const loginCurrentUserApi = async () => {
   const result = await axios.get(
     `users/current`
   );
+
   return result.data;
 };
 export const addContactsUserApi = async objUser => {
