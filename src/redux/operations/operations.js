@@ -89,6 +89,9 @@ export const loginCurrentUser = createAsyncThunk(
   async (_,{ rejectWithValue, getState }) => {
     const state = getState()
     const tokenUser = state.userState.token
+    if (tokenUser === null) {
+      return
+    }
     token.set(tokenUser);
     try {
       const user = await loginCurrentUserApi();
