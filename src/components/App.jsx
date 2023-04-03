@@ -17,7 +17,6 @@ const App = () => {
     <Routes>
       <Route path="/" element={<SiteNav />}>
         <Route index element={userEmail ? <Contacts /> : <StartPage />} />
-
         <Route
           path="contacts"
           element={
@@ -35,7 +34,7 @@ const App = () => {
           }
         />
         <Route
-          path="logout"
+          path="signup"
           element={
             <PublicPoute>
               <LogOut />

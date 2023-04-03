@@ -1,52 +1,99 @@
 import css from './CreateUser.module.css';
 import { registerUser } from 'redux/operations/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { userTokenSelector } from 'redux/selector/selector';
+import { useMemo, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { errorUserRequestSelector } from 'redux/selector/selector';
 const LogOut = () => {
+  const [state, setState] = useState({ name: '', email: '', password: '' });
+  const { email, password, name } = state;
   const dispatch = useDispatch();
-  const userToken = useSelector(userTokenSelector);
+  const userError = useSelector(errorUserRequestSelector);
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    dispatch(
-      registerUser({
-        name: e.currentTarget.user.value,
-        email: e.currentTarget.email.value,
-        password: e.currentTarget.password.value,
-      })
-    ).then(() => {
-      e.target.user.value = '';
-      e.target.email.value = '';
-      e.target.password.value = '';
-      <Navigate to="/" replace={true} />;
-    });
+    dispatch(registerUser(state));
   };
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setState(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  useMemo(() => {
+    if (userError === null) {
+      setState({ name: '', email: '', password: '' });
+      return;
+    }
 
-  return userToken !== '' ? (
-    <Navigate to="/" replace={true} />
-  ) : (
+    toast.error(userError, {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    });
+  }, [userError]);
+  return (
     <div className={css.container}>
       <form className={css.form} onSubmit={handleSubmit}>
-        <label htmlFor="user" className={css.label}>
+        <label htmlFor="name" className={css.label}>
           {'User Name'}
 
-          <input className={css.input} type="text" name="user" />
+          <input
+            className={css.input}
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
         </label>
         <label htmlFor="email" className={css.label}>
           {'Email'}
 
-          <input className={css.input} type="email" name="email" />
+          <input
+            className={css.input}
+            type="email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
         </label>
         <label htmlFor="password" className={css.label}>
           {'Password'}
 
-          <input className={css.input} type="password" name="password" />
+          <input
+            className={css.input}
+            type="password"
+            value={password}
+            name="password"
+            onChange={handleChange}
+          />
         </label>
         <button type="submit" className={css.button}>
           Create User
         </button>
       </form>
+      {userError !== null && (
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      )}
     </div>
   );
 };

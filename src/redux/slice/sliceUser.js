@@ -24,23 +24,18 @@ export const sliceUser = createSlice({
         state.user.name = action.payload.user.name
         state.user.email = action.payload.user.email
         state.token = action.payload.token
-        state.user.isLoading = false;
         state.user.isLogggedIn = true;
       })
-      .addCase(loginUser.pending, state => {
-        state.user.isLoading = 'true';
-      })
       .addCase(loginUser.rejected, (state, action) => {
-        state.user.isLoading = false;
         state.user.error = action.payload;
       })
+
 
       .addCase(loginCurrentUser.fulfilled, (state, action) => {
         state.user.name = action.payload.name
         state.user.email = action.payload.email
         state.user.isLoading = false;
         state.user.isLogggedIn = true;
-
       })
       .addCase(loginCurrentUser.pending, state => {
         state.user.isLoading = true;
@@ -50,35 +45,26 @@ export const sliceUser = createSlice({
         state.user.error = action.payload;
       })
 
-      .addCase(logoutUser.fulfilled, (state, action) => {
+
+      .addCase(logoutUser.fulfilled, (state) => {
         state.user.name = ''
         state.user.email = ''
         state.token = ''
-        state.user.isLoading = false;
         state.user.isLogggedIn = false;
-
-      })
-      .addCase(logoutUser.pending, state => {
-        state.user.isLoading = true;
       })
       .addCase(logoutUser.rejected, (state, {payload}) => {
-        state.user.isLoading = false;
         state.user.error = payload;
       })
+
 
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user.name = action.payload.user.name
         state.user.email = action.payload.user.email
         state.token = action.payload.token
-        state.user.isLoading = false;
         state.user.isLogggedIn = true;
 
       })
-      .addCase(registerUser.pending, state => {
-        state.user.isLoading = true;
-      })
       .addCase(registerUser.rejected, (state, action) => {
-        state.user.isLoading = false;
         state.user.error = action.payload;
       })
   },

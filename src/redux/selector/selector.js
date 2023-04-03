@@ -14,6 +14,8 @@ export const userNameSelector = state => state.userState.user.name
 
 export const userEmailSelector = state => state.userState.user.email 
 
-export const isLogggedInSelector = state => state.userState.user.isLoading 
+export const isLogggedInSelector = state => state.userState.user.isLogggedIn 
+
+export const isLoadingCurrentSelector = state => state.userState.user.isLoading 
 
 
